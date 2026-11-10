@@ -1,10 +1,14 @@
 import type { EventRecord, Ticket, Venue } from '../data/types';
 
+export interface TicketRenderer {
+
+}
+
 export class HtmlTicketRenderer {
   constructor(
     private readonly event: EventRecord,
     private readonly venue: Venue,
-  ) {}
+  ) { }
 
   render(ticket: Ticket): string {
     const place = ticket.row !== null ? `Fila ${ticket.row} Posto ${ticket.number}` : 'Posto unico';
@@ -23,13 +27,13 @@ export class HtmlTicketRenderer {
 }
 
 // usato dalla stampante termica della cassa
-export class TextTicketRenderer {
+export class TextTicketRenderer implements TicketRenderer {
   constructor(
     private readonly event: EventRecord,
     private readonly venue: Venue,
-  ) {}
+  ) { }
 
-  print(ticket: Ticket): string {
+  render(ticket: Ticket): string {
     const place = ticket.row !== null ? `FILA ${ticket.row} POSTO ${ticket.number}` : 'POSTO UNICO';
     return [
       'TICKETHUB',

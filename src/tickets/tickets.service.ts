@@ -18,7 +18,7 @@ export class TicketsService {
     private readonly tickets: TicketsRepository,
     private readonly events: EventsRepository,
     private readonly venues: VenuesRepository,
-  ) {}
+  ) { }
 
   createForOrder(order: Order, venue: Venue): Ticket[] {
     const created: Ticket[] = [];
@@ -53,14 +53,9 @@ export class TicketsService {
       case 'html':
         return new HtmlTicketRenderer(event, venue).render(ticket);
       case 'text':
-        return new TextTicketRenderer(event, venue).print(ticket);
+        return new TextTicketRenderer(event, venue).render(ticket);
       default:
         throw new BadRequestException('formato non supportato: ' + format);
     }
   }
-
-  // vecchia versione con il QR, tenuta nel caso tornasse utile
-  // renderQr(ticket: Ticket): string {
-  //   return qr.encode(ticket.code, { size: 200 });
-  // }
 }

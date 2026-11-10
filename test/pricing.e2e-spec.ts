@@ -53,3 +53,37 @@ describe('Prezzo early bird di e-1', () => {
     expect(res.body.find((e: { id: string }) => e.id === 'e-1').priceFrom).toBe('44.69');
   });
 });
+
+describe('Prezzo dinamico di e-2', () => {
+  let app: INestApplication;
+  const buy = (eventId: string, seats: { seatId: string; quantity?: number }[]) =>
+    request(app.getHttpServer()).post('/orders').send({ ...base, eventId, seats });
+
+  beforeAll(async () => {
+    app = await createApp();
+  });
+  afterAll(() => app.close());
+
+  it('con la PLATEA vuota un posto costa 50,40', async () => {
+    const res = await buy('e-2', [{ seatId: 'PLATEA-1-1' }]).expect(201);
+    expect(res.body.order.total).toBe(50.4);
+  });
+
+  it('con meno di metà dei posti liberi la PLATEA costa il 15% in più', async () => {
+    // venduti 1 + 150 = 151 su 300: liberi 149
+    const seats = Array.from({ length: 150 }, (_, i) => ({ seatId: `PLATEA-${2 + Math.floor(i / 20)}-${1 + (i % 20)}` }));
+    await buy('e-2', seats).expect(201);
+    const res = await buy('e-2', [{ seatId: 'PLATEA-15-20' }]).expect(201);
+    expect(res.body.order.total).toBe(57.96);
+  });
+
+  it('con meno di un quinto dei posti liberi la PLATEA costa il 30% in più', async () => {
+    // venduti 152 + 89 = 241 su 300: liberi 59
+    const seats = Array.from({ length: 89 }, (_, i) => ({
+      seatId: `PLATEA-${2 + Math.floor((150 + i) / 20)}-${1 + ((150 + i) % 20)}`,
+    }));
+    await buy('e-2', seats).expect(201);
+    const res = await buy('e-2', [{ seatId: 'PLATEA-15-19' }]).expect(201);
+    expect(res.body.order.total).toBe(65.52);
+  });
+});

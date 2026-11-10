@@ -62,6 +62,10 @@ curl -X POST localhost:3000/orders -H 'content-type: application/json' -d '{"eve
 | 4000000000000002 | Addebito rifiutato |
 | 4000000000000119 | La prima chiamata va in timeout |
 
+## Provider di pagamento
+
+All'avvio si sceglie il provider con la variabile d'ambiente `PAYMENT_PROVIDER`: `alpha` (predefinito) o `beta`. AlphaPay usa `ALPHA_API_KEY`; BetaPayments usa `BETA_MERCHANT_ID` e ha i token di prova `tok_ok` (approvato) e `tok_refuse` (rifiutato).
+
 ## Regole per l'AI
 
 Le regole per gli assistenti AI sono in `AGENTS.md`. Se usi una chat generica, incolla prima il blocco di `docs/contesto-ai.md`.

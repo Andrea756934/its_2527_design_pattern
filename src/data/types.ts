@@ -16,7 +16,7 @@ export interface Venue {
   seats: Seat[];
 }
 
-export type PricingType = 'standard' | 'flat' | 'free' | 'early_bird';
+export type PricingType = 'standard' | 'flat' | 'free' | 'early_bird' | 'dynamic';
 
 export type EventStatus = 'draft' | 'on_sale' | 'cancelled';
 
@@ -31,7 +31,7 @@ export interface EventRecord {
   pricingType: PricingType;
   sectorPrices: Record<string, number>;
   flatPrice?: number;
-  earlyBird?: {tickets: number, discount: number};
+  earlyBird?: { tickets: number, discount: number };
 }
 
 export interface User {
@@ -61,7 +61,7 @@ export interface Order {
   items: OrderItem[];
   total: number;
   status: OrderStatus;
-  alphaChargeId: string | null;
+  paymentId: string | null;
   createdAt: string;
 }
 

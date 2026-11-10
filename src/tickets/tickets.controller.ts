@@ -11,7 +11,7 @@ export class TicketsController {
     private readonly tickets: TicketsRepository,
     private readonly events: EventsRepository,
     private readonly venues: VenuesRepository,
-  ) {}
+  ) { }
 
   @Get(':id/download')
   download(@Param('id') id: string, @Query('format') format: string = 'html', @Res() res: Response) {
@@ -29,7 +29,7 @@ export class TicketsController {
         extension = 'html';
         break;
       case 'text':
-        body = new TextTicketRenderer(event, venue).print(ticket);
+        body = new TextTicketRenderer(event, venue).render(ticket);
         contentType = 'text/plain; charset=utf-8';
         extension = 'txt';
         break;
